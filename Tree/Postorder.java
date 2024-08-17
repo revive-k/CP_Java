@@ -20,7 +20,7 @@ public class Postorder {
         System.out.print(root.data + " ");
     }
 
-    private static void iterativePostOrder(Node root) {
+    private static void postOrderUsingTwoStack(Node root) {
         if(root == null) return;
         Stack<Node> stack1 = new Stack<>();
         Stack<Node> stack2 = new Stack<>();
@@ -36,6 +36,30 @@ public class Postorder {
         }
     }
 
+    private static void postOrderUsingOneStack(Node root) {
+        if(root==null) return;
+        Stack<Node> stack = new Stack<>();
+        Node current = root;
+        while(current!=null || !stack.empty()) {
+            if(current!=null) {
+                stack.push(current);
+                current = current.left;
+            } else {
+                Node node = stack.peek().right;
+                if(node == null) {
+                    node = stack.pop();
+                    System.out.print(node.data + " ");
+                    while(!stack.empty() && node == stack.peek().right) {
+                        node = stack.pop();
+                        System.out.print(node.data + " ");
+                    }
+                } else {
+                    current = node;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Node root = new Node(1);
         root.left = new Node(2);
@@ -48,7 +72,10 @@ public class Postorder {
 
         System.out.println("----Postorder using recursion----");
         postOrderUsingRecursion(root);
-        System.out.println("\n----Postorder using iterative----");
-        iterativePostOrder(root);
+        System.out.println("\n----Iterative: Postorder using one stack----");
+        postOrderUsingOneStack(root);
+        System.out.println("\n----Iterative: Postorder using two stack----");
+        postOrderUsingTwoStack(root);
+
     }
 }
